@@ -1,0 +1,14 @@
+eclipse.preferences.version=1
+encoding//src/main/java/jsoft/ConnectionPool.java=UTF-8
+encoding//src/main/java/jsoft/ConnectionPoolImpl.java=UTF-8
+encoding//src/main/java/jsoft/ads/article/ArticleModel.java=UTF-8
+encoding//src/main/java/jsoft/ads/basic/Basic.java=UTF-8
+encoding//src/main/java/jsoft/ads/basic/BasicImpl.java=UTF-8
+encoding//src/main/java/jsoft/ads/category/CategoryModel.java=UTF-8
+encoding//src/main/java/jsoft/ads/section/SectionLibrary.java=UTF-8
+encoding//src/main/java/jsoft/ads/section/SectionModel.java=UTF-8
+encoding//src/main/java/jsoft/ads/user/User.java=UTF-8
+encoding//src/main/java/jsoft/ads/user/UserControl.java=UTF-8
+encoding//src/main/java/jsoft/ads/user/UserImpl.java=UTF-8
+encoding//src/main/java/jsoft/ads/user/UserLibrary.java=UTF-8
+encoding//src/main/java/jsoft/ads/user/UserModel.java=UTF-8
