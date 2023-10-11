@@ -1,12 +1,17 @@
 package jsoft.ads.category;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.javatuples.Pair;
+import org.javatuples.Quartet;
+import org.javatuples.Quintet;
 import org.javatuples.Triplet;
 
 import jsoft.ConnectionPool;
 import jsoft.objects.CategoryObject;
+import jsoft.objects.SectionObject;
+import jsoft.objects.UserObject;
 
 public class CategoryControl {
 
@@ -36,9 +41,14 @@ public class CategoryControl {
 		return this.cm.editCategory(c);
 	}
 	
-	public ArrayList<String> viewCategory(Triplet<CategoryObject, Short, Byte> infors){
-		Pair<ArrayList<CategoryObject>, Integer> datas = this.cm.getCategorys(infors.getValue0(), infors.getValue1(), infors.getValue2());
-		return CategoryLibrary.viewCategories(datas);
+	public ArrayList<String> viewCategory(Quartet<CategoryObject, Short, Byte, UserObject> infors){
+		Quintet<ArrayList<CategoryObject>, 
+		ArrayList<UserObject>, 
+		ArrayList<SectionObject>, 
+		Integer, 
+		HashMap<Integer, String>> datas = this.cm.getCategories(infors);
+		UserObject user = infors.getValue3();
+		return CategoryLibrary.viewCategories(datas, user);
 	}
 	public static void main(String[] args) {
 //		CategoryControl c = new CategoryControl(null);

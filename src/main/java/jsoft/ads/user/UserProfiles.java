@@ -409,7 +409,6 @@ public class UserProfiles extends HttpServlet {
 				String jobarea = request.getParameter("txtJobarea");
 				String notes = request.getParameter("txtNotes");
 				String birthday = request.getParameter("txtBirthday");
-				String alias = request.getParameter("txtAlias");
 				if(fullname != null && !fullname.equalsIgnoreCase("") 
 						&& email != null && !email.equalsIgnoreCase("") 
 						&& phone != null && !phone.equalsIgnoreCase("") ) {
@@ -424,7 +423,6 @@ public class UserProfiles extends HttpServlet {
 					nUser.setUser_birthday(birthday);
 					nUser.setUser_jobarea(Utilities.encode(jobarea));
 					nUser.setUser_notes(Utilities.encode(notes));
-					nUser.setUser_alias(alias);
 					ConnectionPool cp = (ConnectionPool) getServletContext().getAttribute("CPool");
 					UserControl uc = new UserControl(cp);
 					if(cp == null) {

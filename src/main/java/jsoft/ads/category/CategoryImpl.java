@@ -5,12 +5,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.javatuples.Quartet;
 import org.javatuples.Triplet;
 
 import jsoft.ConnectionPool;
 import jsoft.ConnectionPoolImpl;
 import jsoft.ads.basic.BasicImpl;
 import jsoft.objects.CategoryObject;
+import jsoft.objects.UserObject;
 
 public class CategoryImpl extends BasicImpl implements Category {
 	
@@ -164,15 +166,25 @@ public class CategoryImpl extends BasicImpl implements Category {
 	}
 
 	@Override
-	public ArrayList<ResultSet> getCategorys(Triplet<CategoryObject, Integer, Byte> infors) {
+	public ArrayList<ResultSet> getCategories(Quartet<CategoryObject, Short, Byte, UserObject> infors) {
 		// TODO Auto-generated method stub
+		UserObject user = infors.getValue3();
+		byte total = infors.getValue2();
+		int at = (infors.getValue1() - 1) * total;
 		CategoryObject similar = infors.getValue0();
 		String sql = "SELECT * FROM tblcategory JOIN tblsection ON tblcategory.category_section_id=tblsection.section_id ";
+		sql += "LEFT JOIN tbluser ON tblcategory.category_manager_id = tbluser.user_id ";
 		sql += "ORDER BY category_id ASC ";
-		sql += "LIMIT " + infors.getValue1()  + ", " + infors.getValue2() + "; ";
+		sql += "LIMIT " + at  + ", " + total + "; ";
 		StringBuilder sql1 = new StringBuilder();
 		sql1.append(sql);
-		sql1.append("SELECT COUNT(*) AS total FROM tblcategory");
+		sql1.append("SELECT COUNT(*) AS total FROM tblcategory;");
+		//Danh sách người sử dụng sẽ được cấp quyền quản lý
+		sql1.append("SELECT * FROM tbluser WHERE ");
+		sql1.append("((user_permission<"+user.getUser_permission()+") AND (");
+		sql1.append("user_parent_id="+user.getUser_id()+")) OR (user_id="+user.getUser_id()+")");
+		sql1.append("; ");
+		sql1.append("SELECT * FROM tblsection;");
 		return this.getReList(sql1.toString());
 	}
 

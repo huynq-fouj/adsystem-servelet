@@ -1,6 +1,6 @@
 package jsoft.library;
 
-import javax.servlet.*;
+import javax.servlet.ServletRequest;
 import net.htmlparser.jericho.*;
 
 public class Utilities {
@@ -30,6 +30,13 @@ public class Utilities {
 			value = Integer.parseInt(str_value);
 		}
 		return value;
+	}
+	
+	public static boolean getBoolParam(ServletRequest request, String name) {
+		if(Utilities.getIntParam(request, name) != 0) {
+			return true;
+		}
+		return false;
 	}
 	
 	/**

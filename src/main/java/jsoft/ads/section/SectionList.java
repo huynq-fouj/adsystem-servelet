@@ -18,6 +18,8 @@ import jsoft.ConnectionPool;
 import jsoft.ads.user.USER_SORT_TYPE;
 import jsoft.ads.user.UserControl;
 import jsoft.library.Utilities;
+import jsoft.library.Utilities_date;
+import jsoft.objects.SectionObject;
 import jsoft.objects.UserObject;
 
 /**
@@ -70,7 +72,7 @@ public class SectionList extends HttpServlet {
 		if(page < 1) {
 			page = 1;
 		}
-		ArrayList<String> viewList = sc.viewSection(new Quartet<>(null, page, (byte)10, user));
+		ArrayList<String> viewList = sc.viewSection(new Quartet<>(null, page, (byte)100, user));
 		sc.releaseConnection();
 		RequestDispatcher header = request.getRequestDispatcher("/header?pos=arselist");		
 		if(header != null) {
@@ -106,7 +108,7 @@ public class SectionList extends HttpServlet {
 		
 		//start modal
 		out.append("<button type=\"button\" class=\"btn btn-primary btn-sm mt-2\" data-bs-toggle=\"modal\" data-bs-target=\"#addSection\">");
-		out.append("<i class=\"bi bi-person-plus\"></i> Thêm mới</i>");
+		out.append("Thêm mới");
 		out.append("</button>");
 		
 		
@@ -124,12 +126,12 @@ public class SectionList extends HttpServlet {
 			out.append("<div class=\"row mb-3\">");
 				out.append("<div class=\"col-lg-6\">");
 					out.append("<label for=\"sectionname\" class=\"form-label\">Tên chuyên mục</label>");
-					out.append("<input type=\"text\" class=\"form-control\" id=\"sectionname\" name=\"txtSectionname\" required>");
-					out.append("<div class=\"invalid-feedback\">Hãy nhập tên của tài khoản</div>");
+					out.append("<input type=\"text\" class=\"form-control\" id=\"sectionname\" name=\"txtSectionName\" required>");
+					out.append("<div class=\"invalid-feedback\">Hãy nhập tên chuyên mục</div>");
 				out.append("</div>");
 				out.append("<div class=\"col-lg-6\">");
-					out.append("<label for=\"manager\" class=\"form-label\">Quản lý</label>");
-					out.append("<select class=\"form-select\" id=\"manager\" name=\"slcManaher\" required>");
+					out.append("<label for=\"manager\" class=\"form-label\">Người quản lý</label>");
+					out.append("<select class=\"form-select\" id=\"manager\" name=\"slcManager\" required>");
 						out.append(viewList.get(1));
 					out.append("</select>");
 					out.append("<div class=\"invalid-feedback\">Hãy chọn quản lý</div>");
@@ -138,14 +140,18 @@ public class SectionList extends HttpServlet {
 			out.append("<div class=\"row\">");
 				out.append("<div class=\"col-lg-12\">");
 					out.append("<label for=\"sectionname\" class=\"form-label\">Ghi chú</label>");
-					out.append("<textarea type=\"text\" class=\"form-control\" rows=\"10\" id=\"sectionnote\" name=\"txtSectionnote\"></textarea>");
+					out.append("<textarea type=\"text\" class=\"form-control\" rows=\"10\" id=\"sectionnote\" name=\"txtSectionNote\"></textarea>");
 				out.append("</div>");
 			out.append("</div>");
 		out.append("</div>");//modal body
+		
+		out.append("<input type=\"hidden\" name=\"act\" value=\"add\">");
+		
 		out.append("<div class=\"modal-footer\">");
-		out.append("<button type=\"submit\" class=\"btn btn-primary btn-sm\"><i class=\"bi bi-person-plus\"></i>Thêm mới</button>");
+		out.append("<button type=\"submit\" class=\"btn btn-primary btn-sm\">Thêm mới</button>");
 		out.append("<button type=\"button\" class=\"btn btn-secondary btn-sm\" data-bs-dismiss=\"modal\">Thoát</button>");
 		out.append("</div>");
+		
 		out.append("</div>");
 		
 		out.append("</form>");
@@ -177,7 +183,100 @@ public class SectionList extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		UserObject user = (UserObject) request.getSession().getAttribute("userLogined");
+		request.setCharacterEncoding("utf-8");
+		String action = request.getParameter("act");
+		if(action != null) {
+			if(action.equalsIgnoreCase("add")) {
+				String sectionName = request.getParameter("txtSectionName");
+				int sectionManagerId = Utilities.getIntParam(request, "slcManager");
+				if(sectionName != null && !sectionName.equalsIgnoreCase("")
+						&& sectionManagerId > 0) {
+					String sectionNote = request.getParameter("txtSectionNote");
+					String date = Utilities_date.getDate();
+					SectionObject nSection = new SectionObject();
+					nSection.setSection_created_author_id(user.getUser_id());
+					nSection.setSection_manager_id(sectionManagerId);
+					nSection.setSection_created_date(date);
+					nSection.setSection_name(Utilities.encode(sectionName));
+					nSection.setSection_notes(Utilities.encode(sectionNote));
+					ConnectionPool cp = (ConnectionPool) getServletContext().getAttribute("CPool");
+					SectionControl sc = new SectionControl(cp);
+					if(cp != null) {
+						getServletContext().setAttribute("CPool", sc.getCP());
+					}
+					boolean result = sc.addSection(nSection);
+					sc.releaseConnection();
+					if(result) {
+						response.sendRedirect("/adv/section/list");
+					}else {
+						response.sendRedirect("/adv/section/list?err=notok");
+					}
+				}else {
+					response.sendRedirect("/adv/section/list?err=value");
+				}
+			}else if(action.equalsIgnoreCase("edit")) {
+				int id = Utilities.getIntParam(request, "idForPost");
+				String sectionName = request.getParameter("txtSectionName");
+				int sectionManagerId = Utilities.getIntParam(request, "slcManager");
+				if(sectionName != null && !sectionName.equalsIgnoreCase("")
+						&& sectionManagerId > 0 && id > 0) {
+					String sectionNote = request.getParameter("txtSectionNote");
+					String date = Utilities_date.getDate();
+					boolean isEnable = Utilities.getBoolParam(request, "slcEnable");
+					SectionObject eSection = new SectionObject();
+					eSection.setSection_id(id);
+					eSection.setSection_manager_id(sectionManagerId);
+					eSection.setSection_last_modified(date);
+					eSection.setSection_name(Utilities.encode(sectionName));
+					eSection.setSection_notes(Utilities.encode(sectionNote));
+					eSection.setSection_enable(isEnable);
+					ConnectionPool cp = (ConnectionPool) getServletContext().getAttribute("CPool");
+					SectionControl sc = new SectionControl(cp);
+					if(cp != null) {
+						getServletContext().setAttribute("CPool", sc.getCP());
+					}
+					boolean result = sc.editSection(eSection);
+					sc.releaseConnection();
+					if(result) {
+						response.sendRedirect("/adv/section/list");
+					}else {
+						response.sendRedirect("/adv/section/list?err=notok");
+					}
+				}else {
+					response.sendRedirect("/adv/section/list?err=value");
+				}
+			}else if(action.equalsIgnoreCase("del")) {
+				int id = Utilities.getIntParam(request, "idForPost");
+				if(user.getUser_permission() > 4) {
+					if(id > 0) {
+						SectionObject dSection = new SectionObject();
+						dSection.setSection_id(id);
+						ConnectionPool cp = (ConnectionPool) getServletContext().getAttribute("CPool");
+						SectionControl sc = new SectionControl(cp);
+						if(cp != null) {
+							getServletContext().setAttribute("CPool", sc.getCP());
+						}
+						boolean result = sc.delSection(dSection);
+						sc.releaseConnection();
+						if(result) {
+							response.sendRedirect("/adv/section/list");
+						}else {
+							response.sendRedirect("/adv/section/list?err=notok");
+						}
+					}else {
+						response.sendRedirect("/adv/section/list?err=value");
+					}
+				}else {
+					response.sendRedirect("/adv/section/list?err=nopermis");
+				}
+			}else {
+				response.sendRedirect("/adv/section/list?err=notok");
+			}
+		}else {
+			response.sendRedirect("/adv/section/list?err=notok");
+		}
+		
 	}
 
 }

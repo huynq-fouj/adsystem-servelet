@@ -58,7 +58,7 @@ public class error extends HttpServlet {
 				out.append("Lỗi khi thực hiện xóa!");
 				break;
 			case "nopermis":
-				out.append("Không có quền xóa tài khoản!");
+				out.append("Không đủ quyền hạn!");
 				break;
 			case "repass":
 				out.append("Mật khẩu nhập lại không trùng khớp hoặc không có giá trị!");
@@ -71,6 +71,9 @@ public class error extends HttpServlet {
 				break;
 			case "eqlpass":
 				out.append("Mật khẩu mới không được trùng với mật khẩu hiện tại!");
+				break;
+			case "value":
+				out.append("Dữ liệu gửi đi không hợp lệ!");
 				break;
 //			case "notok":
 //				out.append("Lỗi trong quá trình thực hiện!");

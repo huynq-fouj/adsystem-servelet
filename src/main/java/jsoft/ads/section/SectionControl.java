@@ -42,7 +42,7 @@ public class SectionControl {
 	public ArrayList<String> viewSection(Quartet<SectionObject, Short, Byte, UserObject> infors){
 		Quartet<ArrayList<SectionObject>, Integer, HashMap<Integer, String>, ArrayList<UserObject>> datas = this.sm.getSections(infors);
 		
-		return SectionLibrary.viewSections(datas);
+		return SectionLibrary.viewSections(datas, infors.getValue3());
 	}
 	public static void main(String[] args) {
 		

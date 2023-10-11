@@ -236,54 +236,60 @@ public class UserLibrary {
 		tmp.append("<nav aria-label=\"...\">");
 		tmp.append("<ul class=\"pagination justify-content-center\">");
 		
-		//Previous page
-		if(page == 1) {
-			tmp.append("<li class=\"page-item disabled\"><a class=\"page-link\" href=\""+url+"\"><span aria-hidden=\"true\">&laquo;</span></a></li>");
-			tmp.append("<li class=\"page-item active\" aria-current=\"page\"><a class=\"page-link\" href=\"#\">"+page+"</a></li>");
-		}else {
-			tmp.append("<li class=\"page-item\"><a class=\"page-link\" href=\""+url+"page="+(page - 1)+"\"><span aria-hidden=\"true\">&laquo;</span></a></li>");
-			tmp.append("<li class=\"page-item\" aria-current=\"page\"><a class=\"page-link\" href=\""+url+"page=1\">1</a></li>");
-		}
-		
-		//Left current
-		String leftCurrent = "";
-		int count = 0;
-		for(int i = page - 1; i > 1; i--) {
-			leftCurrent = "<li class=\"page-item\"><a class=\"page-link\" href=\""+url+"page="+i+"\">" + i + "</a></li>" + leftCurrent;
-			if(++count >= 2) {
-				break;
+		if(countPage > 1) {
+			//Previous page
+			if(page == 1) {
+				tmp.append("<li class=\"page-item disabled\"><a class=\"page-link\" href=\""+url+"\"><span aria-hidden=\"true\">&laquo;</span></a></li>");
+				tmp.append("<li class=\"page-item active\" aria-current=\"page\"><a class=\"page-link\" href=\"#\">"+page+"</a></li>");
+			}else {
+				tmp.append("<li class=\"page-item\"><a class=\"page-link\" href=\""+url+"page="+(page - 1)+"\"><span aria-hidden=\"true\">&laquo;</span></a></li>");
+				tmp.append("<li class=\"page-item\" aria-current=\"page\"><a class=\"page-link\" href=\""+url+"page=1\">1</a></li>");
 			}
-		}
-		if(page > 4) {
-			leftCurrent = "<li class=\"page-item disabled\"><a class=\"page-link\" href=\"#\">...</a></li>" + leftCurrent;
-		}
-		tmp.append(leftCurrent);
-		//End left current
-		//Current
-		if(page > 1 && page < countPage) {
-			tmp.append("<li class=\"page-item active\" aria-current=\"page\"><a class=\"page-link\" href=\"#\">"+page+"</a></li>");
-		}
-		//Right current
-		String rightCurrent = "";
-		count = 0;
-		for(int i = page + 1; i < countPage; i++) {
-			rightCurrent += "<li class=\"page-item\"><a class=\"page-link\" href=\""+url+"page="+i+"\">" + i + "</a></li>";
-			if(++count >= 2) {
-				break;
+			
+			//Left current
+			String leftCurrent = "";
+			int count = 0;
+			for(int i = page - 1; i > 1; i--) {
+				leftCurrent = "<li class=\"page-item\"><a class=\"page-link\" href=\""+url+"page="+i+"\">" + i + "</a></li>" + leftCurrent;
+				if(++count >= 2) {
+					break;
+				}
 			}
-		}
-		if(page < countPage - 3) {
-			rightCurrent += "<li class=\"page-item disabled\"><a class=\"page-link\" href=\"#\">...</a></li>";
-		}
-		tmp.append(rightCurrent);
-		//End right current
-		//Next page
-		if(page == countPage) {	
-			tmp.append("<li class=\"page-item active\" aria-current=\"page\"><a class=\"page-link\" href=\"#\">"+page+"</a></li>");
-			tmp.append("<li class=\"page-item disabled\"><a class=\"page-link\" href=\""+url+"\" tabindex=\"-1\" aria-disabled=\"true\" ><span aria-hidden=\"true\">&raquo;</span></a></li>");
+			if(page > 4) {
+				leftCurrent = "<li class=\"page-item disabled\"><a class=\"page-link\" href=\"#\">...</a></li>" + leftCurrent;
+			}
+			tmp.append(leftCurrent);
+			//End left current
+			//Current
+			if(page > 1 && page < countPage) {
+				tmp.append("<li class=\"page-item active\" aria-current=\"page\"><a class=\"page-link\" href=\"#\">"+page+"</a></li>");
+			}
+			//Right current
+			String rightCurrent = "";
+			count = 0;
+			for(int i = page + 1; i < countPage; i++) {
+				rightCurrent += "<li class=\"page-item\"><a class=\"page-link\" href=\""+url+"page="+i+"\">" + i + "</a></li>";
+				if(++count >= 2) {
+					break;
+				}
+			}
+			if(page < countPage - 3) {
+				rightCurrent += "<li class=\"page-item disabled\"><a class=\"page-link\" href=\"#\">...</a></li>";
+			}
+			tmp.append(rightCurrent);
+			//End right current
+			//Next page
+			if(page == countPage) {	
+				tmp.append("<li class=\"page-item active\" aria-current=\"page\"><a class=\"page-link\" href=\"#\">"+page+"</a></li>");
+				tmp.append("<li class=\"page-item disabled\"><a class=\"page-link\" href=\""+url+"\" tabindex=\"-1\" aria-disabled=\"true\" ><span aria-hidden=\"true\">&raquo;</span></a></li>");
+			}else {
+				tmp.append("<li class=\"page-item\" aria-current=\"page\"><a class=\"page-link\" href=\""+url+"page="+countPage+"\">"+countPage+"</a></li>");
+				tmp.append("<li class=\"page-item\"><a class=\"page-link\" href=\""+url+"page="+(page + 1)+"\" tabindex=\"-1\" aria-disabled=\"true\" ><span aria-hidden=\"true\">&raquo;</span></a></li>");
+			}
 		}else {
-			tmp.append("<li class=\"page-item\" aria-current=\"page\"><a class=\"page-link\" href=\""+url+"page="+countPage+"\">"+countPage+"</a></li>");
-			tmp.append("<li class=\"page-item\"><a class=\"page-link\" href=\""+url+"page="+(page + 1)+"\" tabindex=\"-1\" aria-disabled=\"true\" ><span aria-hidden=\"true\">&raquo;</span></a></li>");
+			tmp.append("<li class=\"page-item disabled\"><a class=\"page-link\" href=\"#\"><span aria-hidden=\"true\">&laquo;</span></a></li>");
+			tmp.append("<li class=\"page-item active\" aria-current=\"page\"><a class=\"page-link\" href=\"#\">"+page+"</a></li>");
+			tmp.append("<li class=\"page-item disabled\"><a class=\"page-link\" href=\"#\" tabindex=\"-1\" aria-disabled=\"true\" ><span aria-hidden=\"true\">&raquo;</span></a></li>");
 		}
 		
 		tmp.append("</ul>");

@@ -3,7 +3,7 @@ package jsoft.ads.category;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-import org.javatuples.Triplet;
+import org.javatuples.Quartet;
 
 import jsoft.ShareControl;
 import jsoft.objects.*;
@@ -15,6 +15,5 @@ public interface Category extends ShareControl{
 	public boolean delCategory(CategoryObject item);
 	
 	public ResultSet getCategory(Short id);
-	public ArrayList<ResultSet> getCategorys(Triplet<CategoryObject, Integer, Byte> infors);
-	
+	public ArrayList<ResultSet> getCategories(Quartet<CategoryObject, Short, Byte, UserObject> infors);	
 }

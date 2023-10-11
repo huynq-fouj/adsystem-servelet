@@ -2,9 +2,12 @@ package jsoft.ads.category;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.*;
 
 import org.javatuples.Pair;
+import org.javatuples.Quartet;
+import org.javatuples.Quintet;
+import org.javatuples.Sextet;
 import org.javatuples.Triplet;
 
 import jsoft.*;
@@ -68,11 +71,15 @@ public class CategoryModel {
 		return item;
 	}
 	
-	public Pair<ArrayList<CategoryObject>, Integer> getCategorys(CategoryObject similar, short page, byte total){
+	public Quintet<ArrayList<CategoryObject>,
+		ArrayList<UserObject>, 
+		ArrayList<SectionObject>, 
+		Integer, 
+		HashMap<Integer, String>> getCategories(Quartet<CategoryObject, Short, Byte, UserObject> infors){
 		ArrayList<CategoryObject> items = new ArrayList<>();
-		int at = (page-1)*total;
-		ArrayList<ResultSet> res = this.c.getCategorys(new Triplet<>(similar, at, total));
+		ArrayList<ResultSet> res = this.c.getCategories(infors);
 		CategoryObject item = null;
+		HashMap<Integer, String> managerName = new HashMap<>();
 		ResultSet rs = res.get(0);
 		if(rs != null) {
 			try {
@@ -80,7 +87,6 @@ public class CategoryModel {
 					item = new CategoryObject();
 					item.setCategory_id(rs.getShort("category_id"));
 					item.setCategory_name(rs.getString("category_name"));
-					item.setCategory_section_id(rs.getShort("category_section_id"));
 					item.setCategory_notes(rs.getString("category_notes"));
 					item.setCategory_created_date(rs.getString("category_created_date"));
 					item.setCategory_created_author_id(rs.getInt("category_created_author_id"));
@@ -91,8 +97,12 @@ public class CategoryModel {
 					item.setCategory_image(rs.getString("category_image"));
 					item.setCategory_name_en(rs.getString("category_name_en"));
 					item.setCategory_language(rs.getByte("category_language"));
-					item.setSection_name(rs.getString("section_name"));
+					
 					item.setCategory_section_id(rs.getShort("section_id"));
+					item.setSection_name(rs.getString("section_name"));
+					
+					managerName.put(rs.getInt("user_id"), rs.getString("user_fullname"));
+					
 					items.add(item);
 				}
 			} catch (SQLException e) {
@@ -114,18 +124,41 @@ public class CategoryModel {
 			}
 		}
 		
-		return new Pair<>(items, all);
-	}
-	
-	public static void main(String[] args) {
-		ConnectionPool cp = new ConnectionPoolImpl();
-		CategoryModel cate = new CategoryModel(cp);
-		Pair<ArrayList<CategoryObject>, Integer> data = cate.getCategorys(null, (short) 1, (byte)100);
-		ArrayList<CategoryObject> list = data.getValue0();
-		list.forEach(item -> {
-			System.out.print(list.indexOf(item) + " - ");
-			System.out.println(item);
-		});
-		System.out.println("Tổng số Category: total = " + data.getValue1());
+		ArrayList<UserObject> users = new ArrayList<>();
+		UserObject user = null;
+		rs = res.get(2);
+		if(rs != null) {
+			try {
+				while(rs.next()) {
+					user = new UserObject();
+					user.setUser_id(rs.getInt("user_id"));
+					user.setUser_name(rs.getString("user_name"));
+					user.setUser_fullname(rs.getString("user_fullname"));
+					users.add(user);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		ArrayList<SectionObject> sections = new ArrayList<>();
+		SectionObject section = null;
+		rs = res.get(3);
+		if(rs != null) {
+			try {
+				while(rs.next()) {
+					section = new SectionObject();
+					section.setSection_id(rs.getInt("section_id"));
+					section.setSection_name(rs.getString("section_name"));
+					sections.add(section);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return new Quintet<>(items, users, sections, all, managerName);
 	}
 }

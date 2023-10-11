@@ -17,6 +17,8 @@ import org.javatuples.Triplet;
 import jsoft.ConnectionPool;
 import jsoft.ads.section.SectionControl;
 import jsoft.library.Utilities;
+import jsoft.objects.CategoryObject;
+import jsoft.objects.SectionObject;
 import jsoft.objects.UserObject;
 
 /**
@@ -63,11 +65,7 @@ public class CategoryList extends HttpServlet {
 		String saveKey = (key != null && !key.equals("")) ? key.trim() : "";
 		
 		
-		short page = Utilities.getShortParam(request, "page");
-		if(page < 1) {
-			page = 1;
-		}
-		ArrayList<String> viewList = sc.viewCategory(new Triplet<>(null, page, (byte)10));
+		ArrayList<String> viewList = sc.viewCategory(new Quartet<>(null, (short) 1, (byte)10, user));
 		sc.releaseConnection();
 		RequestDispatcher header = request.getRequestDispatcher("/header?pos=arcalist");		
 		if(header != null) {
@@ -101,55 +99,8 @@ public class CategoryList extends HttpServlet {
 		
 //		out.append("<p>This is an examle page with no contrnt. You can use it as a starter for your custom pages.</p>");
 		
-		//start modal
-		out.append("<button type=\"button\" class=\"btn btn-primary btn-sm mt-2\" data-bs-toggle=\"modal\" data-bs-target=\"#addSection\">");
-		out.append("<i class=\"bi bi-person-plus\"></i> Thêm mới</i>");
-		out.append("</button>");
-		
-		
-		out.append("<div class=\"modal fade\" id=\"addSection\" data-bs-backdrop=\"static\" data-bs-keyboard=\"false\" tabindex=\"-1\" aria-labelledby=\"staticBackdropLabel\" aria-hidden=\"true\">");
-		out.append("<div class=\"modal-dialog modal-lg\">");
-		//start from
-		out.append("<form method=\"post\" action=\"\" class=\"needs-validation\" novalidate>");
-		
-		out.append("<div class=\"modal-content\">");
-		out.append("<div class=\"modal-header\">");
-		out.append("<h1 class=\"modal-title fs-5\" id=\"addSectionLabel\">Thêm mới chuyên mục</h1>");
-		out.append("<button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button>");
-		out.append("</div>");
-		out.append("<div class=\"modal-body\">");
-			out.append("<div class=\"row mb-3\">");
-				out.append("<div class=\"col-lg-6\">");
-					out.append("<label for=\"sectionname\" class=\"form-label\">Tên chuyên mục</label>");
-					out.append("<input type=\"text\" class=\"form-control\" id=\"sectionname\" name=\"txtSectionname\" required>");
-					out.append("<div class=\"invalid-feedback\">Hãy nhập tên của tài khoản</div>");
-				out.append("</div>");
-				out.append("<div class=\"col-lg-6\">");
-					out.append("<label for=\"manager\" class=\"form-label\">Quản lý</label>");
-					out.append("<select class=\"form-select\" id=\"manager\" name=\"slcManaher\" required>");
-						out.append(viewList.get(1));
-					out.append("</select>");
-					out.append("<div class=\"invalid-feedback\">Hãy chọn quản lý</div>");
-				out.append("</div>");
-			out.append("</div>");
-			out.append("<div class=\"row\">");
-				out.append("<div class=\"col-lg-12\">");
-					out.append("<label for=\"sectionname\" class=\"form-label\">Ghi chú</label>");
-					out.append("<textarea type=\"text\" class=\"form-control\" rows=\"10\" id=\"sectionnote\" name=\"txtSectionnote\"></textarea>");
-				out.append("</div>");
-			out.append("</div>");
-		out.append("</div>");//modal body
-		out.append("<div class=\"modal-footer\">");
-		out.append("<button type=\"submit\" class=\"btn btn-primary btn-sm\"><i class=\"bi bi-person-plus\"></i>Thêm mới</button>");
-		out.append("<button type=\"button\" class=\"btn btn-secondary btn-sm\" data-bs-dismiss=\"modal\">Thoát</button>");
-		out.append("</div>");
-		out.append("</div>");
-		
-		out.append("</form>");
-		//end from
-		out.append("</div>");
-		out.append("</div>");
-		//end modal
+		//Modal
+		out.append(viewList.get(1));
 		
 		out.append(viewList.get(0));
 		
@@ -174,7 +125,44 @@ public class CategoryList extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		UserObject user = (UserObject) request.getSession().getAttribute("userLogined");
+		request.setCharacterEncoding("utf-8");
+		String action = request.getParameter("act");
+		if(action != null) {
+			if(action.equalsIgnoreCase("add")) {
+				
+			}else if(action.equalsIgnoreCase("edit")) {
+				
+			}else if(action.equalsIgnoreCase("del")) {
+				short id = Utilities.getShortParam(request, "idForPost");
+				if(user.getUser_permission() > 4) {
+					if(id > 0) {
+						CategoryObject dCategory = new CategoryObject();
+						dCategory.setCategory_id(id);
+						ConnectionPool cp = (ConnectionPool) getServletContext().getAttribute("CPool");
+						CategoryControl cc = new CategoryControl(cp);
+						if(cp != null) {
+							getServletContext().setAttribute("CPool", cc.getCP());
+						}
+						boolean result = cc.delCategory(dCategory);
+						cc.releaseConnection();
+						if(result) {
+							response.sendRedirect("/adv/category/list");
+						}else {
+							response.sendRedirect("/adv/category/list?err=notok");
+						}
+					}else {
+						response.sendRedirect("/adv/category/list?err=value");
+					}
+				}else {
+					response.sendRedirect("/adv/category/list?err=nopermis");
+				}
+			}else {
+				response.sendRedirect("/adv/category/list?err=notok");
+			}
+		}else {
+			response.sendRedirect("/adv/category/list?err=notok");
+		}
 	}
 
 }
