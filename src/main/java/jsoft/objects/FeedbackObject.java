@@ -1,7 +1,7 @@
 package jsoft.objects;
 
 public class FeedbackObject {
-	private short feedback_id;
+	private int feedback_id;
 	private String feedback_title;
 	private String feedback_content;
 	private String feedback_fullname;
@@ -10,10 +10,10 @@ public class FeedbackObject {
 	private String feedback_phone;
 	private short feedback_product_id;
 	private String feedback_created_date;
-	private String feedback_view;
+	private boolean feedback_view;
 	private String feedback_company;
 	private String feedback_intro;
-	public short getFeedback_id() {
+	public int getFeedback_id() {
 		return feedback_id;
 	}
 	public String getFeedback_title() {
@@ -40,7 +40,7 @@ public class FeedbackObject {
 	public String getFeedback_created_date() {
 		return feedback_created_date;
 	}
-	public String getFeedback_view() {
+	public boolean isFeedback_view() {
 		return feedback_view;
 	}
 	public String getFeedback_company() {
@@ -49,7 +49,7 @@ public class FeedbackObject {
 	public String getFeedback_intro() {
 		return feedback_intro;
 	}
-	public void setFeedback_id(short feedback_id) {
+	public void setFeedback_id(int feedback_id) {
 		this.feedback_id = feedback_id;
 	}
 	public void setFeedback_title(String feedback_title) {
@@ -76,7 +76,7 @@ public class FeedbackObject {
 	public void setFeedback_created_date(String feedback_created_date) {
 		this.feedback_created_date = feedback_created_date;
 	}
-	public void setFeedback_view(String feedback_view) {
+	public void setFeedback_view(boolean feedback_view) {
 		this.feedback_view = feedback_view;
 	}
 	public void setFeedback_company(String feedback_company) {
