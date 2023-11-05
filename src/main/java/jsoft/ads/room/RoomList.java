@@ -1,4 +1,4 @@
-package jsoft.ads.feedback;
+package jsoft.ads.room;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,26 +12,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.javatuples.Quartet;
+import org.javatuples.Triplet;
 
 import jsoft.ConnectionPool;
-import jsoft.ConnectionPoolImpl;
-import jsoft.ads.user.UserControl;
+import jsoft.ads.feedback.FeedbackControl;
 import jsoft.library.Utilities;
 import jsoft.objects.FeedbackObject;
+import jsoft.objects.RoomObject;
 import jsoft.objects.UserObject;
 
 /**
- * Servlet implementation class FeedbackList
+ * Servlet implementation class RoomList
  */
-@WebServlet("/feedback/list")
-public class FeedbackList extends HttpServlet {
+@WebServlet("/room/list")
+public class RoomList extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String CONTENT_TYPE = "text/html; charset=utf-8";
-       
+    private static final String CONTENT_TYPE = "text/html; charset=utf-8";
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public FeedbackList() {
+    public RoomList() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -39,7 +39,7 @@ public class FeedbackList extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		UserObject user = (UserObject) request.getSession().getAttribute("userLogined");
 		if(user != null) {
@@ -55,33 +55,22 @@ public class FeedbackList extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		
 		ConnectionPool cp = (ConnectionPool) getServletContext().getAttribute("CPool");
-		FeedbackControl fc = new FeedbackControl(cp);
+		RoomControl rc = new RoomControl(cp);
 		if(cp != null) {
-			getServletContext().setAttribute("CPool", fc.getCP());
+			getServletContext().setAttribute("CPool", rc.getCP());
 		}
 		
-		String title = "Danh sách phản hồi";
-		String pos = "fblist";
+		String title = "Danh sách phòng";
+		String pos = "rolist";
 		
 		short page = Utilities.getShortParam(request, "page");
 		if(page < 1) {
 			page = 1;
 		}
 		
-		FeedbackObject similar = new FeedbackObject();
-		boolean getState = false;
-		short state_param = Utilities.getShortParam(request, "state");
-		if(state_param > 0) {
-			getState = true;
-			if(state_param == 1) {
-				similar.setFeedback_view(true);
-			}
-			if(state_param == 2) {
-				similar.setFeedback_view(false);
-			}
-		}
-		Quartet<FeedbackObject, Short, Byte, Boolean> infors = new Quartet<>(similar, page, (byte) 10, getState);
-		ArrayList<String> viewList = fc.viewFeedbacks(infors, user);
+		RoomObject similar = new RoomObject();		
+		Triplet<RoomObject, Short, Byte> infors = new Triplet<>(similar, page, (byte) 10);
+		ArrayList<String> viewList = rc.viewRoom(infors);
 		
 		RequestDispatcher header = request.getRequestDispatcher("/header?pos="+pos);		
 		if(header != null) {
@@ -101,7 +90,7 @@ public class FeedbackList extends HttpServlet {
 		out.append("<nav class=\"ms-auto\">");
 		out.append("<ol class=\"breadcrumb\">");
 		out.append("<li class=\"breadcrumb-item d-flex\"><a href=\"index.html\"><i class=\"bi bi-house\"></i></a></li>");
-		out.append("<li class=\"breadcrumb-item\">Phản hồi</li>");
+		out.append("<li class=\"breadcrumb-item\">Phòng</li>");
 		out.append("<li class=\"breadcrumb-item active\">Danh sách</li>");
 		out.append("</ol>");
 		out.append("</nav>");

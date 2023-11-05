@@ -11,12 +11,13 @@ public class RoomObject {
 	private int room_number_people;
 	private int room_number_bed;
 	private float room_price;
-	private String room_static;
+	private int room_static;
 	private float room_quality;
 	private int room_quantity;
 	private String room_address;
 	private String room_image;
 	private boolean room_enable;
+	private String room_hotel_name;
 
 	public int getRoom_id() {
 		return room_id;
@@ -58,7 +59,7 @@ public class RoomObject {
 		return room_price;
 	}
 
-	public String getRoom_static() {
+	public int getRoom_static() {
 		return room_static;
 	}
 
@@ -118,7 +119,7 @@ public class RoomObject {
 		this.room_price = room_price;
 	}
 
-	public void setRoom_static(String room_static) {
+	public void setRoom_static(int room_static) {
 		this.room_static = room_static;
 	}
 
@@ -144,5 +145,13 @@ public class RoomObject {
 
 	public void setRoom_enable(boolean room_enable) {
 		this.room_enable = room_enable;
+	}
+
+	public String getRoom_hotel_name() {
+		return room_hotel_name;
+	}
+
+	public void setRoom_hotel_name(String room_hotel_name) {
+		this.room_hotel_name = room_hotel_name;
 	}
 }
