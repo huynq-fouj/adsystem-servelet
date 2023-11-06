@@ -12,12 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.javatuples.Quartet;
-import org.javatuples.Triplet;
 
 import jsoft.ConnectionPool;
-import jsoft.ads.feedback.FeedbackControl;
 import jsoft.library.Utilities;
-import jsoft.objects.FeedbackObject;
 import jsoft.objects.RoomObject;
 import jsoft.objects.UserObject;
 
@@ -69,7 +66,7 @@ public class RoomList extends HttpServlet {
 		}
 		
 		RoomObject similar = new RoomObject();		
-		Triplet<RoomObject, Short, Byte> infors = new Triplet<>(similar, page, (byte) 10);
+		Quartet<RoomObject, Short, Byte, ROOM_SORT_TYPE> infors = new Quartet<>(similar, page, (byte) 10, ROOM_SORT_TYPE.ID_INC);
 		ArrayList<String> viewList = rc.viewRoom(infors);
 		
 		RequestDispatcher header = request.getRequestDispatcher("/header?pos="+pos);		

@@ -2,7 +2,8 @@ package jsoft.ads.room;
 
 import java.util.ArrayList;
 
-import org.javatuples.Triplet;
+import org.javatuples.Pair;
+import org.javatuples.Quartet;
 
 import jsoft.ConnectionPool;
 import jsoft.objects.RoomObject;
@@ -39,9 +40,9 @@ public class RoomControl {
 		return this.rm.getRoom(id);
 	}
 	
-	public ArrayList<String> viewRoom(Triplet<RoomObject, Short, Byte> infors) {
-		
-		return RoomLibrary.viewRooms();
+	public ArrayList<String> viewRoom(Quartet<RoomObject, Short, Byte, ROOM_SORT_TYPE> infors) {
+		Pair<ArrayList<RoomObject>, Integer> datas = this.rm.getRooms(infors);
+		return RoomLibrary.viewRooms(datas,infors);
 	}
 	
 }

@@ -18,6 +18,8 @@ public class RoomObject {
 	private String room_image;
 	private boolean room_enable;
 	private String room_hotel_name;
+	private String room_built_at;
+	private String room_upgraded_at;
 
 	public int getRoom_id() {
 		return room_id;
@@ -153,5 +155,21 @@ public class RoomObject {
 
 	public void setRoom_hotel_name(String room_hotel_name) {
 		this.room_hotel_name = room_hotel_name;
+	}
+
+	public String getRoom_built_at() {
+		return room_built_at;
+	}
+
+	public void setRoom_built_at(String room_built_at) {
+		this.room_built_at = room_built_at;
+	}
+
+	public String getRoom_upgraded_at() {
+		return room_upgraded_at;
+	}
+
+	public void setRoom_upgraded_at(String room_upgraded_at) {
+		this.room_upgraded_at = room_upgraded_at;
 	}
 }
