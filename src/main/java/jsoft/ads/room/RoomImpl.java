@@ -154,22 +154,22 @@ public class RoomImpl extends BasicImpl implements Room {
 		sql.append("");
 		switch(sortType) {
 		case ID_DEC:
-			sql.append("ORDER BY room_id DESC");
+			sql.append("ORDER BY room_id DESC ");
 			break;
 		case TITLE:
-			sql.append("ORDER BY room_title ASC");
+			sql.append("ORDER BY room_title ASC ");
 			break;
 		case QUALITY:
-			sql.append("ORDER BY room_quality DESC");
+			sql.append("ORDER BY room_quality DESC ");
 			break;
 		case BUILT_AT:
-			sql.append("ORDER BY room_built_at DESC");
+			sql.append("ORDER BY room_built_at DESC ");
 			break;
 		case UPGRADED_AT:
-			sql.append("ORDER BY room_upgraded_at DESC");
+			sql.append("ORDER BY room_upgraded_at DESC ");
 			break;
 		default:
-			sql.append("ORDER BY room_id ASC");
+			sql.append("ORDER BY room_id ASC ");
 		}
 		sql.append("LIMIT ").append(at).append(",").append(total);
 		sql.append(";");

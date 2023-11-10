@@ -100,7 +100,7 @@ public class RoomList extends HttpServlet {
 		out.append("<div class=\"card-body\">");
 		
 		//Start Modal
-		
+		out.append(viewList.get(2));
 		//End Modal
 		
 		out.append(viewList.get(0));
