@@ -88,6 +88,15 @@ public class SideBar extends HttpServlet {
 							break;
 					}
 					break;
+				case "fb":
+					collapsed.put("feedback", "");
+					show.put("feedback", "show");
+					switch(act) {
+						case "list":
+							actives.put("fblist", "class=\"active\"");
+							break;
+					}
+					break;
 			}
 		}
 		
@@ -181,30 +190,21 @@ public class SideBar extends HttpServlet {
 		out.append("</li>");
 		out.append("</ul>");
 		out.append("</li><!-- End Tables Nav -->");
-
+		//
 		out.append("<li class=\"nav-item\">");
 		out.append(
-				"<a class=\"nav-link collapsed\" data-bs-target=\"#charts-nav\" data-bs-toggle=\"collapse\" href=\"#\">");
-		out.append("<i class=\"bi bi-bar-chart\"></i><span>Charts</span><i class=\"bi bi-chevron-down ms-auto\"></i>");
+				"<a class=\"nav-link "+collapsed.getOrDefault("feedback", "collapsed")+"\" data-bs-target=\"#tables-nav\" data-bs-toggle=\"collapse\" href=\"#\">");
+		out.append(
+				"<i class=\"bi bi-bar-chart\"></i><span>Phòng</span><i class=\"bi bi-chevron-down ms-auto\"></i>");
 		out.append("</a>");
-		out.append("<ul id=\"charts-nav\" class=\"nav-content collapse \" data-bs-parent=\"#sidebar-nav\">");
+		out.append("<ul id=\"tables-nav\" class=\"nav-content collapse "+show.getOrDefault("feedback", "")+"\" data-bs-parent=\"#sidebar-nav\">");
 		out.append("<li>");
-		out.append("<a href=\"charts-chartjs.html\">");
-		out.append("<i class=\"bi bi-circle\"></i><span>Chart.js</span>");
-		out.append("</a>");
-		out.append("</li>");
-		out.append("<li>");
-		out.append("<a href=\"charts-apexcharts.html\">");
-		out.append("<i class=\"bi bi-circle\"></i><span>ApexCharts</span>");
-		out.append("</a>");
-		out.append("</li>");
-		out.append("<li>");
-		out.append("<a href=\"charts-echarts.html\">");
-		out.append("<i class=\"bi bi-circle\"></i><span>ECharts</span>");
+		out.append("<a href=\"/adv/room/list\" "+actives.getOrDefault("fblist", "")+">");
+		out.append("<i class=\"bi bi-circle\"></i><span>Danh sách</span>");
 		out.append("</a>");
 		out.append("</li>");
 		out.append("</ul>");
-		out.append("</li><!-- End Charts Nav -->");
+		out.append("</li><!-- End Tables Nav -->");
 
 		out.append("<li class=\"nav-item\">");
 		out.append(
