@@ -75,9 +75,9 @@ public class error extends HttpServlet {
 			case "value":
 				out.append("Dữ liệu gửi đi không hợp lệ!");
 				break;
-//			case "notok":
-//				out.append("Lỗi trong quá trình thực hiện!");
-//				break;
+			case "notok":
+				out.append("Lỗi trong quá trình thực hiện!");
+				break;
 			default:
 				out.append("Có lỗi xin vui lòng kiểm tra lại!");
 			}

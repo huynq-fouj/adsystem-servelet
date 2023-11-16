@@ -178,11 +178,11 @@ public class SideBar extends HttpServlet {
 		//
 		out.append("<li class=\"nav-item\">");
 		out.append(
-				"<a class=\"nav-link "+collapsed.getOrDefault("room", "collapsed")+"\" data-bs-target=\"#tables-nav\" data-bs-toggle=\"collapse\" href=\"#\">");
+				"<a class=\"nav-link "+collapsed.getOrDefault("room", "collapsed")+"\" data-bs-target=\"#room-nav\" data-bs-toggle=\"collapse\" href=\"#\">");
 		out.append(
 				"<i class=\"bi bi-layout-text-window-reverse\"></i><span>Phòng</span><i class=\"bi bi-chevron-down ms-auto\"></i>");
 		out.append("</a>");
-		out.append("<ul id=\"tables-nav\" class=\"nav-content collapse "+show.getOrDefault("room", "")+"\" data-bs-parent=\"#sidebar-nav\">");
+		out.append("<ul id=\"room-nav\" class=\"nav-content collapse "+show.getOrDefault("room", "")+"\" data-bs-parent=\"#sidebar-nav\">");
 		out.append("<li>");
 		out.append("<a href=\"/adv/room/list\" "+actives.getOrDefault("rolist", "")+">");
 		out.append("<i class=\"bi bi-circle\"></i><span>Danh sách</span>");
@@ -193,13 +193,13 @@ public class SideBar extends HttpServlet {
 		//
 		out.append("<li class=\"nav-item\">");
 		out.append(
-				"<a class=\"nav-link "+collapsed.getOrDefault("feedback", "collapsed")+"\" data-bs-target=\"#tables-nav\" data-bs-toggle=\"collapse\" href=\"#\">");
+				"<a class=\"nav-link "+collapsed.getOrDefault("feedback", "collapsed")+"\" data-bs-target=\"#feedback-nav\" data-bs-toggle=\"collapse\" href=\"#\">");
 		out.append(
-				"<i class=\"bi bi-bar-chart\"></i><span>Phòng</span><i class=\"bi bi-chevron-down ms-auto\"></i>");
+				"<i class=\"bi bi-bar-chart\"></i><span>Phản hồi</span><i class=\"bi bi-chevron-down ms-auto\"></i>");
 		out.append("</a>");
-		out.append("<ul id=\"tables-nav\" class=\"nav-content collapse "+show.getOrDefault("feedback", "")+"\" data-bs-parent=\"#sidebar-nav\">");
+		out.append("<ul id=\"feedback-nav\" class=\"nav-content collapse "+show.getOrDefault("feedback", "")+"\" data-bs-parent=\"#sidebar-nav\">");
 		out.append("<li>");
-		out.append("<a href=\"/adv/room/list\" "+actives.getOrDefault("fblist", "")+">");
+		out.append("<a href=\"/adv/feedback/list\" "+actives.getOrDefault("fblist", "")+">");
 		out.append("<i class=\"bi bi-circle\"></i><span>Danh sách</span>");
 		out.append("</a>");
 		out.append("</li>");

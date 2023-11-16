@@ -94,7 +94,7 @@ public class FeedbackImpl extends BasicImpl implements Feedback {
 	@Override
 	public ResultSet getFeedback(int id) {
 		// TODO Auto-generated method stub
-		String sql = "SELECT * FROM tblfeedback WHERE id=?";
+		String sql = "SELECT * FROM tblfeedback WHERE feedback_id=?";
 		return this.get(sql, id);
 	}
 
@@ -109,9 +109,10 @@ public class FeedbackImpl extends BasicImpl implements Feedback {
 		//Lấy danh sách feedback
 		sql.append("SELECT * FROM tblfeedback ");
 		sql.append(this.createConditions(similar, getState));
+		sql.append("ORDER BY feedback_id DESC ");
 		sql.append("LIMIT " + at + ", " + total + ";");
 		//Lấy số lượng bản ghi
-		sql.append("SELECT COUNT(*) FROM tblfeedback ");
+		sql.append("SELECT COUNT(*) AS total FROM tblfeedback ");
 		sql.append(this.createConditions(similar, getState));
 		sql.append(";");
 		return this.getReList(sql.toString());
@@ -122,9 +123,9 @@ public class FeedbackImpl extends BasicImpl implements Feedback {
 		if(getState) {
 			tmp.append("WHERE feedback_view=");
 			if(similar.isFeedback_view()) {
-				tmp.append("1");
+				tmp.append("1 ");
 			}else {
-				tmp.append("0");
+				tmp.append("0 ");
 			}
 		}
 		return tmp;

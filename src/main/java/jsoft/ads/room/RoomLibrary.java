@@ -248,7 +248,7 @@ public class RoomLibrary {
 			tmp.append("</div>");
 		tmp.append("</div>");
 		
-		tmp.append("<input type=\"hidden\" name=\"idForPost\" value=\"\">");
+		tmp.append("<input type=\"hidden\" name=\"idForPost\" value=\"0\">");
 		tmp.append("<input type=\"hidden\" name=\"act\" value=\"add\">");
 		
 		tmp.append("</div>");

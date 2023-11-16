@@ -8,6 +8,7 @@ import org.javatuples.Pair;
 import org.javatuples.Quartet;
 
 import jsoft.ConnectionPool;
+import jsoft.library.Utilities;
 import jsoft.objects.FeedbackObject;
 
 public class FeedbackModel {
@@ -72,11 +73,11 @@ public class FeedbackModel {
 				while(rs.next()) {
 					feedback = new FeedbackObject();
 					feedback.setFeedback_id(rs.getInt("feedback_id"));
-					feedback.setFeedback_fullname(rs.getString("feedback_fullname"));
+					feedback.setFeedback_fullname(Utilities.decode(rs.getString("feedback_fullname")));
 					feedback.setFeedback_email(rs.getString("feedback_email"));
 					feedback.setFeedback_created_date(rs.getString("feedback_created_date"));
-					feedback.setFeedback_title(rs.getString("feedback_title"));
-					feedback.setFeedback_content(rs.getString("feedback_content"));
+					feedback.setFeedback_title(Utilities.decode(rs.getString("feedback_title")));
+					feedback.setFeedback_content(Utilities.decode(rs.getString("feedback_content")));
 					feedback.setFeedback_view(rs.getBoolean("feedback_view"));
 					feedbacks.add(feedback);
 				}

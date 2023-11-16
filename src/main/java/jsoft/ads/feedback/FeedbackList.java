@@ -17,6 +17,7 @@ import jsoft.ConnectionPool;
 import jsoft.ConnectionPoolImpl;
 import jsoft.ads.user.UserControl;
 import jsoft.library.Utilities;
+import jsoft.library.Utilities_date;
 import jsoft.objects.FeedbackObject;
 import jsoft.objects.UserObject;
 
@@ -114,7 +115,7 @@ public class FeedbackList extends HttpServlet {
 		out.append("<div class=\"card-body\">");
 		
 		//Start Modal
-		
+		out.append(viewList.get(2));
 		//End Modal
 		
 		out.append(viewList.get(0));
@@ -141,7 +142,81 @@ public class FeedbackList extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		request.setCharacterEncoding("utf-8");
+		int id = Utilities.getIntParam(request, "idForPost");
+		String action = request.getParameter("act");
+		if(action != null && action.equalsIgnoreCase("add")) {
+			String fullname = request.getParameter("txtFullname");
+			String email = request.getParameter("txtEmail");
+			String title = request.getParameter("txtTitle");
+			if(fullname != null && !fullname.equalsIgnoreCase("")
+					&& email != null && !email.equalsIgnoreCase("")
+					&& title != null && !title.equalsIgnoreCase("")) {
+				String content = request.getParameter("txtContent");
+				FeedbackObject fb = new FeedbackObject();
+				fb.setFeedback_content(Utilities.encode(content));
+				fb.setFeedback_fullname(Utilities.encode(fullname));
+				fb.setFeedback_title(Utilities.encode(title));
+				fb.setFeedback_email(email);
+				fb.setFeedback_created_date(Utilities_date.getDate());
+				ConnectionPool cp = (ConnectionPool) getServletContext().getAttribute("CPool");
+				FeedbackControl uc = new FeedbackControl(cp);
+				if(cp == null) {
+					getServletContext().setAttribute("CPool", uc.getCP());
+				}
+				boolean result = uc.addFeedback(fb);
+				uc.releaseConnection();
+				if(result) {
+					response.sendRedirect("/adv/feedback/list");
+				} else {
+					response.sendRedirect("/adv/feedback/list?err=add");
+				}
+			} else {
+				response.sendRedirect("/adv/feedback/list?err=value");
+			}
+		}else {
+			if(id > 0) {
+				if(action != null && action.equalsIgnoreCase("edit")) {
+					ConnectionPool cp = (ConnectionPool) getServletContext().getAttribute("CPool");
+					FeedbackControl uc = new FeedbackControl(cp);
+					if(cp == null) {
+						getServletContext().setAttribute("CPool", uc.getCP());
+					}
+					FeedbackObject fb = uc.getFeedback(id);
+					if(fb != null) {
+						fb.setFeedback_view(true);
+						boolean result = uc.editFeedback(fb);
+						uc.releaseConnection();
+						if(result) {
+							response.sendRedirect("/adv/feedback/list");
+						} else {
+							response.sendRedirect("/adv/feedback/list?err=edit");
+						}
+					} else {
+						response.sendRedirect("/adv/feedback/list?err=notok");
+					}
+				} else if(action != null && action.equalsIgnoreCase("del")) {
+					FeedbackObject fb = new FeedbackObject();
+					fb.setFeedback_id(id);
+					ConnectionPool cp = (ConnectionPool) getServletContext().getAttribute("CPool");
+					FeedbackControl uc = new FeedbackControl(cp);
+					if(cp == null) {
+						getServletContext().setAttribute("CPool", uc.getCP());
+					}
+					boolean result = uc.delFeedback(fb);
+					uc.releaseConnection();
+					if(result) {
+						response.sendRedirect("/adv/feedback/list");
+					}else {
+						response.sendRedirect("/adv/feedback/list?err=del");
+					}
+				} else {
+					response.sendRedirect("/adv/feedback/list?err=notok");
+				}
+			} else {
+				response.sendRedirect("/adv/feedback/list?err=e");
+			}
+		}
 	}
 
 }
